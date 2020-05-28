@@ -51,7 +51,6 @@ public class Polynomial extends Lista {
         
         final int Mp = mayorPol.getSize();
         final int mp = menorPol.getSize();
-        boolean sort = false; // indica si es necesario reacomodar los terminos del Polinomio
         
         SearchForCommonExponents:
         for (int i = 0; i < Mp; i++) { 
@@ -73,7 +72,6 @@ public class Polynomial extends Lista {
             if (!PolynomialContainsExponent(menorPol.exp.get(i), result)) {
                 result.coef.add(menorPol.coef.get(i));
                 result.exp.add(menorPol.exp.get(i));
-                sort = true;
             }
         }
         
@@ -210,7 +208,7 @@ public class Polynomial extends Lista {
     
     
     
-    //lois siguientes metodos son unicamente creados para acceder a los atributos desde el Tester que se
+    //los siguientes metodos son unicamente creados para acceder a los atributos desde el Tester que se
     // encuentra en otro package, no pensado ni usado para implementacion.
     public int getCoef(int x) {
         return coef.get(x);

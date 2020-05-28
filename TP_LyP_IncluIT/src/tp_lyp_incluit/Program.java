@@ -3,7 +3,8 @@ package tp_lyp_incluit;
 public class Program {
 
     public static void main(String[] args) {
-
+        // ejemplos utilizados para los tests, solo para pruebas
+        
           int a[] = {2,6,8,9};
           int b[] = {3,5,6,7};
           int c[] = {5,1,3,2,4};
