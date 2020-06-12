@@ -2,7 +2,7 @@ package UTest;
 
 import java.util.Iterator;
 import org.junit.Before;
-import tp_lyp_incluit.Lista;
+import tp_lyp_incluit.LinkedList;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import java.util.NoSuchElementException;
@@ -10,7 +10,7 @@ import tp_lyp_incluit.Polynomial;
 
 public class Tester {
     
-    private Lista lista;
+    private LinkedList lista;
     private Polynomial polym, polym1, polym2, polym3,polym4, result1,result2;
     
     int a[] = {2,6,8,9};
@@ -23,7 +23,7 @@ public class Tester {
     
     @Before
     public void setUp() {
-        lista = new Lista();
+        lista = new LinkedList();
         polym = new Polynomial();
         polym1 = new Polynomial(a);
         polym2 = new Polynomial(b);
@@ -66,7 +66,7 @@ public class Tester {
     }
     
     @Test
-    public void testChangeValue(){
+        public void testChangeValue(){
         lista.add(5);
         lista.changeValue(0, 10);
         assertEquals(lista.get(0), 10);
@@ -192,11 +192,20 @@ public class Tester {
     @Test
     public void testGetCoefficient(){
         assertEquals(5, result2.getCoefficient(3));
+        
+        assertEquals(0, result2.getCoefficient(-1));
+        assertEquals(0, result2.getCoefficient(5));
+        
     }
     
     @Test
     public void testSetCoefficient(){
+        assertEquals(16, result1.getCoefficient(3));
         result1.setCoefficient(3, 8);
+        assertEquals(8, result1.getCoefficient(3));
+        
+        result1.setCoefficient(4, 10);  //al no existir el exp 4, agrega el termino con ese exp y coef
+        assertEquals(10, result1.getCoefficient(4));
     }
     
     @Test
@@ -204,19 +213,18 @@ public class Tester {
 
         assertEquals(211.0, result1.valueOf(2), 0);
         assertEquals(370.0, result1.valueOf(2.5f), 0);
-        
     }
     
     @Test
     public void testEquals(){
-        Polynomial res;
-        res = polym3.add(polym4);   //misma def. que result2
+        Polynomial res2;
+        res2 = polym3.add(polym4);   //misma definicion que result2
         
         assertFalse(result2.equals(result1));
-        result1 = result2;
         
+        result1 = result2;
         assertTrue(result2.equals(result1));
-        assertTrue(res.equals(result2));
+        assertTrue(res2.equals(result2));
     }
 }
 

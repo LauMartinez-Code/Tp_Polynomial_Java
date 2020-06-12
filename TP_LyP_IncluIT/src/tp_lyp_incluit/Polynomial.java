@@ -1,23 +1,19 @@
 package tp_lyp_incluit;
 
-import java.util.NoSuchElementException;
-import java.util.Objects;
+public class Polynomial {
 
-public class Polynomial extends Lista {
+    LinkedList coef, exp; //coeficiente y exponente
 
-    Lista coef, exp;    //coeficiente y exponente    
-    
     public Polynomial() {   // 1. constructor debe crear un objeto Polynomial igual al polinomio 0(cero) (grado n = 0).
-
-        this.coef = new Lista();
-        this.exp = new Lista();
+        this.coef = new LinkedList();
+        this.exp = new LinkedList();
         coef.add(0);
         exp.add(0);
     }
-
+    
     public Polynomial(int coef[]) {  // 2. crear un objeto Polynomial cuyo grado sea igual al tamaño del arreglo coef
-        this.coef = new Lista();
-        this.exp = new Lista();
+        this.coef = new LinkedList();
+        this.exp = new LinkedList();
 
         for (int i = 0; i < coef.length; i++) {
             if (coef[i] != 0) {
@@ -27,11 +23,7 @@ public class Polynomial extends Lista {
         }
     }
     
-    @Override
-    public void add(int x){} //sobreescrito para que no haga nada
-    
-    public Polynomial add(Polynomial pol) { //retorna un Polynomial igual a la suma entre this y pol.
-        //es distinto al add() de Lista,este suma 2 pol, retorna y tiene parametros diferentes, No agrega nodos
+    public Polynomial add(Polynomial pol) { // 3. retorna un Polynomial igual a la suma entre this y pol.
         
         Polynomial result, mayorPol, menorPol;  //mayor o menor segun la cant. de terminos
         result = new Polynomial();
@@ -62,7 +54,7 @@ public class Polynomial extends Lista {
                 }
             }
             
-            //no encontro exponentes comunes en el termino con grado i
+            //no encontro exponentes comunes en el termino con grado i, entonces lo agrega al resultado tal cual está
             result.coef.add(mayorPol.coef.get(i));
             result.exp.add(mayorPol.exp.get(i));
         }
@@ -75,13 +67,13 @@ public class Polynomial extends Lista {
             }
         }
         
-        result.bubbleSort();    //ordena e invierte el orden de toString
+        result.bubbleSort();    //ordena el polinomio resultante
     
         return result;
     }
     
     //public para tests pero pordria ser private
-    public boolean PolynomialContainsExponent(int exponent, Polynomial result) {
+    public boolean PolynomialContainsExponent(int exponent, Polynomial result) {  //verifica si un exponente dado pertenece al polinomio
         
         for (int i = 0; i < result.exp.getSize(); i++) {
             if (exponent == result.exp.get(i)) {
@@ -112,15 +104,15 @@ public class Polynomial extends Lista {
         }
     }
     
-    @Override
-    public int getSize(){   //en lugar de darle su propio atrib 'size' usa internamente el de sus atrib(exp, coef) que son listas tmb
+    public int getSize(){   //en lugar de darle su propio atributo 'size' usa internamente el de sus atrib(exp, coef) que son Listas tmb
         return this.coef.getSize();
     }
     
 
     public int getCoefficient(int x){ //4. Devuelve el valor del coeficiente del grado x
-        if ( x < 0 || x >= this.exp.getSize() ) {
-            throw new NoSuchElementException();
+        
+        if ( x > this.exp.get(0) || x < this.exp.get(this.getSize()-1) ) { //si x es mayor al exp mas grande del polinomio y menor que el exp mas chico
+            return 0;                                                      //(el polinomio siempre esta ordenado)
         }
         
         for (int i = 0; i < this.exp.getSize(); i++) {
@@ -133,15 +125,23 @@ public class Polynomial extends Lista {
     }
     
     public void setCoefficient(int x, int coef){ // 5. establece el valor del coeficiente de grado x al valor coef
-        if ( x < 0 || x >= this.exp.getSize() ) {
-            throw new NoSuchElementException();
-        }
+        
+        boolean flag = true;
         
         for (int i = 0; i < this.exp.getSize(); i++) {
             if (this.exp.get(i) == x) {
                 this.coef.changeValue(i, coef);
+                flag = false;
             }
         }
+        
+        // Puede que no exista y lo tenga que agregar
+        if (flag) {
+            this.coef.add(coef);
+            this.exp.add(x);
+            this.bubbleSort();
+        }
+        
     }
     
     
@@ -156,27 +156,30 @@ public class Polynomial extends Lista {
         return result;
     }
     
+    
     @Override
     public boolean equals(Object x){  //7. retorna true si this es igual a x, y false en caso contrario
         
-        if ( x instanceof Polynomial ) {
-            
-            this.bubbleSort();
-            ((Polynomial) x).bubbleSort();
+        if ( x instanceof Polynomial ) {           
             
             if (this.coef.getSize() == ((Polynomial) x).getSize()) {
                 
-               for (int i = 0; i < this.coef.getSize(); i++) {
-                
-                    if ( coef.get(i) == ((Polynomial) x).coef.get(i) && (this.exp.get(i) == ((Polynomial) x).exp.get(i)) ) { // == coef && exp
-                        if (i+1 == this.coef.getSize()) { //termino de comparar con exito
-                            return true;
+                int size = this.coef.getSize();
+                            
+               SearchForCommonExponents:
+               for (int i = 0; i < size; i++) {
+                   
+                   for (int j = 0; j < size; j++) {
+                   
+                        if ( this.coef.get(i) == ((Polynomial) x).coef.get(j) && this.exp.get(i) == ((Polynomial) x).exp.get(j) ) { // == coef && exp
+                            if (i+1 == this.coef.getSize()) { //termino de comparar con exito
+                                return true;
+                            }
+                            continue SearchForCommonExponents;
                         }
-                        continue;
                     }
-                    else{
-                        return false;
-                    }
+                   
+                    return false;
                 } 
             }
         }    

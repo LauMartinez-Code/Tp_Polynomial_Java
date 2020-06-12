@@ -3,20 +3,23 @@ package tp_lyp_incluit;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class Lista {
+public class LinkedList implements List {
     
     private int size;
     private Nodo root;
     
 
+    @Override
     public int getSize() {
         return size;
     }
     
+    @Override
     public boolean isEmpty(){
         return size == 0; 
     }
     
+    @Override
     public void add(int x){
         Nodo n = new Nodo(x);
         n.next = root;
@@ -24,6 +27,7 @@ public class Lista {
         size++;
     }
     
+    @Override
     public int get(int index) {
         if (index < 0 || index >= size) {
             throw new NoSuchElementException();
@@ -76,8 +80,6 @@ class Nodo {
     public Nodo(int value) {
         this.value = value;
     }
-    
-    
 }    
 
 class ListIterator implements Iterator{
